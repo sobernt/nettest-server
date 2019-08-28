@@ -11,6 +11,7 @@
 #include <string.h>
 #include <netdb.h>
 #include <nettest.h>
+#include <fstream>
 
 using namespace std;
 int sock;
@@ -101,7 +102,7 @@ int main(int argc, char *argv[])
             header.command = nettest_command_ping;
             header.size = sizeof query;
             inet_aton(argv[3], &query.ip);
-            query.is_tcp = ((strstr( argv[2], (char*)"tcp" ) != NULL || strstr( argv[2], (char*)"TCP" ) != NULL));
+            query.is_tcp = ((strstr( argv[4], (char*)"tcp" ) != NULL || strstr( argv[4], (char*)"TCP" ) != NULL));
             query.packet_length = stoi(argv[5]);
             query.packet_count = stoi(argv[6]);
             query.test_time = stoi(argv[7]);
@@ -153,7 +154,11 @@ int main(int argc, char *argv[])
                             cin >> user_answer;
                         } while (!std::cin.fail() && user_answer!='y' && user_answer!='n');
                         if(user_answer=='y'){
-                            //TODO::save log to file
+                            ofstream out_file("pingout.txt");
+                            if(out_file.is_open()){
+                              out_file << pingout;
+                            }
+                            out_file.close();
                         }
 
                 } else
